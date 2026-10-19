@@ -1286,7 +1286,28 @@
   <nav_data>
     <outline>
       <links>
-        <slidelink slideid="_player.66csQqVamEc.6jcxN1NPV61" displaytext="Course Title" expand="false" type="slide" />
+        <slidelink slideid="_player.66csQqVamEc" displaytext="Untitled Scene" expand="true" type="slide">
+          <links>
+            <slidelink slideid="_player.66csQqVamEc.6jcxN1NPV61" displaytext="Course Title" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6h98RmNeAAG" displaytext="What is your name" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.5qfGSs0kaDJ" displaytext="Learner room" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6c8J0lOm1SJ" displaytext="Zoomed viewLearner room" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6c2YVIT4dcw" displaytext="Email" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.5pm7o1Eb8KD" displaytext="Mentor Introduction" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.609hnV94qNU" displaytext="Behind the office door" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6fV9myBOfhW" displaytext="Challenge 1 – Tell me about yourself" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6EOvjLERDuO" displaytext="Follow-up 1B: Question (Presumptuous)" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6SxS0bMpUj3" displaytext="Follow-up 1A" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6pxnlokoMlf" displaytext="Challenge 2 - SAR Blueprint" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6bRulTafe7G" displaytext="Follow-up 2A : Question" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.5jmadlPYRGS" displaytext="Follow-up 2C: Question" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6E4HArTqNpf" displaytext="Follow-up 3B: Question" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.5z4BBtRupJf" displaytext="Challenge 3 – The &amp;quot;Greatest Weakness&amp;quot;" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.63r7NiOy9Yc" displaytext="Follow-up 3A" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.6I9fyBHKiY8" displaytext="Follow-up 3C" expand="false" type="slide" />
+            <slidelink slideid="_player.66csQqVamEc.5f2v9KcFMHt" displaytext="Dashboard Logic" expand="false" type="slide" />
+          </links>
+        </slidelink>
       </links>
     </outline>
   </nav_data>
