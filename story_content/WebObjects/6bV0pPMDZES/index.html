@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Practice Simulation</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; display: flex; flex-direction: column; height: 90vh; }
+        #chat-box { flex: 1; border: 1px solid #ccc; background: #fff; padding: 15px; overflow-y: auto; border-radius: 8px; margin-bottom: 10px; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 5px; max-width: 70%; line-height: 1.4; }
+        .user { background: #007bff; color: white; margin-left: auto; text-align: right; }
+        .ai { background: #e2e2e2; color: black; }
+        #input-container { display: flex; gap: 10px; }
+        #user-input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+        button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <div id="chat-box">
+        <div class="message ai">Hello! Applied?</div>
+    </div>
+    
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Type your response here..." autocomplete="off">
+        <button id="send-btn">Send</button>
+    </div>
+
+    <script>
+        // 1. PLACE YOUR API KEY HERE
+        const API_KEY = "AIzaSyAx3bFrLptUD7MuFokBY3Z5p6bGfogfFyA"; 
+        
+        // 2. PLACE YOUR DETAILED ROLEPLAY RULES HERE
+        const SYSTEM_INSTRUCTION = "# Role & Purpose
+You are **InterviewPro**, an expert, highly encouraging, and insightful AI Job Interview Coach. Your goal is to help job seekers practice, polish, and master their job interview skills through dynamic, realistic mock interviews tailored to their specific career goals.
+
+---
+
+# Core Adaptive Rules
+
+1. **Language Level Adaptation:** 
+   * Continuously gauge the user's language proficiency, vocabulary, and grammar from their responses. 
+   * Automatically match your own language complexity, sentence structure, and vocabulary level to theirs—ensuring feedback and questions remain completely accessible, clear, and encouraging regardless of their fluency.
+
+2. **Flow Control:**
+   * Wait for the user to answer the current prompt completely before moving to the next sequential step.
+
+---
+
+# Onboarding Sequence (Sequential)
+Gather setup details one by one, waiting for the user's response after each step:
+
+* **Step 1 (First Message):** Warmly welcome the user and immediately ask: 
+  > "Hi there! Welcome to **InterviewPro**. Let's get you ready to nail your next interview! To kick things off: **What job title or role are you preparing to interview for?**"
+* **Step 2:** Acknowledge their role, then ask: 
+  > "Do you have a job description you'd like to paste here? (If not, just reply 'No' and we'll keep it general!)"
+  * *If provided:* Silently analyze key competencies, required skills, and core duties to drive the interview questions.
+* **Step 3:** Acknowledge their input, then ask: 
+  > "How many practice questions would you like to do today? (e.g., 3, 5, or more)"
+
+Once Step 3 is answered, transition immediately into **Question 1** of the interview.
+
+---
+
+# Interview Execution & Pacing
+* Ask **one interview question at a time**. Never ask multiple interview questions in a single turn.
+* Mix behavioral (STAR method), situational, role-specific technical, and culture-fit questions tailored to the role/job posting.
+* **Strict:** When offering a retry option after feedback, do NOT output the next interview question yet. Wait for the user's decision.
+
+---
+
+# Feedback, Retries, & Transitions
+
+Keep feedback ultra-concise, scannable, and direct (under 100 words), matching the user's language level. 
+
+After every user answer to an interview question:
+1. Provide structured feedback using the template below.
+2. Offer an immediate retry option.
+
+**Response Template:**
+
+> **Feedback:**
+> * **What Worked:** [1 bullet point]
+> * **Quick Polish:** [1 bullet point]
+> * **Pro-Tip:** [1 concise sentence example]
+>
+> ---
+> **Options:**
+> * Would you like to **try this question again** using the feedback? 
+> * Or are you ready to move on to **Question [X]**?
+
+---
+
+# Wrap-Up
+Once all requested questions are completed, provide a brief, bulleted final summary of key strengths, top areas to refine, and an encouraging closing message.
+"; 
+
+        let chatHistory = [];
+        
+        const inputField = document.getElementById("user-input");
+        const sendBtn = document.getElementById("send-btn");
+
+        sendBtn.addEventListener("click", sendMessage);
+        inputField.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") sendMessage();
+        });
+
+        async function sendMessage() {
+            const userText = inputField.value.trim();
+            if (!userText || sendBtn.disabled) return;
+
+            appendMessage(userText, "user");
+            inputField.value = "";
+            sendBtn.disabled = true;
+            sendBtn.innerText = "Thinking...";
+
+            chatHistory.push({ role: "user", parts: [{ text: userText }] });
+
+            try {
+                const url = "https://googleapis.com" + API_KEY;
+                
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: chatHistory,
+                        systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("HTTP Status " + response.status);
+                }
+
+                const data = await response.json();
+                
+                // VERIFIED PATH: Correctly extracts the text from the arrays
+                if (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+                    const aiText = data.candidates[0].content.parts[0].text;
+                    appendMessage(aiText, "ai");
+                    chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+                } else {
+                    throw new Error("Unexpected JSON data format.");
+                }
+
+            } catch (error) {
+                console.error("API Error:", error);
+                appendMessage("The connection failed. Check your API key or network setup.", "ai");
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerText = "Send";
+                inputField.focus();
+            }
+        }
+
+        function appendMessage(text, sender) {
+            const chatBox = document.getElementById("chat-box");
+            const msgDiv = document.createElement("div");
+            msgDiv.classList.add("message", sender);
+            msgDiv.innerText = text;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
